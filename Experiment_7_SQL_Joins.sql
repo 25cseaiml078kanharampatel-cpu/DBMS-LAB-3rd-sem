@@ -1,0 +1,66 @@
+CREATE DATABASE IF NOT EXISTS Exp7DB;
+USE Exp7DB;
+
+CREATE TABLE DEPT (
+    DeptNo INT PRIMARY KEY,
+    DName VARCHAR(50),
+    Loc VARCHAR(50)
+);
+
+CREATE TABLE EMP (
+    EmpNo INT PRIMARY KEY,
+    EName VARCHAR(50),
+    Salary DECIMAL(10,2),
+    Mgr INT,
+    DeptNo INT
+);
+
+CREATE TABLE SALGRADE (
+    Grade CHAR(1),
+    LowSal DECIMAL(10,2),
+    HighSal DECIMAL(10,2)
+);
+
+CREATE TABLE AREAS (
+    AreaID INT PRIMARY KEY,
+    AreaName VARCHAR(50)
+);
+
+INSERT INTO DEPT VALUES (10, 'IT', 'Bhubaneswar'), (20, 'HR', 'Rourkela'), (30, 'Sales', 'Delhi');
+
+INSERT INTO EMP VALUES
+(101, 'Arjun', 50000, NULL, 10),
+(102, 'Ravi', 30000, 101, 10),
+(103, 'Meena', 25000, 101, 20),
+(104, 'Kiran', 18000, 103, NULL);
+
+INSERT INTO SALGRADE VALUES ('A', 40000, 60000), ('B', 20000, 39999), ('C', 10000, 19999);
+INSERT INTO AREAS VALUES (1, 'East Zone'), (2, 'North Zone');
+
+SELECT E.EmpNo, E.EName, D.DName, D.Loc
+FROM EMP E, DEPT D
+WHERE E.DeptNo = D.DeptNo;
+
+SELECT E.EName, E.Salary, S.Grade
+FROM EMP E JOIN SALGRADE S
+ON E.Salary BETWEEN S.LowSal AND S.HighSal;
+
+SELECT E.EName AS Employee_Name, M.EName AS Manager_Name
+FROM EMP E INNER JOIN EMP M
+ON E.Mgr = M.EmpNo;
+
+SELECT E.EName, D.DName
+FROM EMP E CROSS JOIN DEPT D;
+
+SELECT E.EName, D.DName
+FROM EMP E INNER JOIN DEPT D ON E.DeptNo = D.DeptNo;
+
+SELECT E.EName, D.DName
+FROM EMP E LEFT JOIN DEPT D ON E.DeptNo = D.DeptNo;
+
+SELECT E.EName, D.DName
+FROM EMP E RIGHT JOIN DEPT D ON E.DeptNo = D.DeptNo;
+
+SELECT E.EName, D.DName FROM EMP E LEFT JOIN DEPT D ON E.DeptNo = D.DeptNo
+UNION
+SELECT E.EName, D.DName FROM EMP E RIGHT JOIN DEPT D ON E.DeptNo = D.DeptNo;
